@@ -18,7 +18,7 @@ class PeliModifier (private val context: Activity, private val arrayList: ArrayL
         var view:View = inflater.inflate(R.layout.item, null)
 
         view.findViewById<TextView>(R.id.nombre).text = arrayList[position].nombre.toString()
-        view.findViewById<TextView>(R.id.genero).text = arrayList[position].gen.toString()
+        view.findViewById<TextView>(R.id.genero).text = arrayList[position].genero.toString()
         view.findViewById<TextView>(R.id.anio).text = arrayList[position].anio.toString()
 
         if(arrayList[position].nombre == "Batman")
@@ -29,7 +29,7 @@ class PeliModifier (private val context: Activity, private val arrayList: ArrayL
         {
             view.findViewById<ImageView>(R.id.imagenPelicula).setImageDrawable(ContextCompat.getDrawable(context, R.drawable.deadpool))
         }
-        if(arrayList[position].gen == "terror")
+        if(arrayList[position].genero == "terror")
         {
             view.findViewById<ImageView>(R.id.imagenPelicula).setImageDrawable(ContextCompat.getDrawable(context, R.drawable.terror))
         }

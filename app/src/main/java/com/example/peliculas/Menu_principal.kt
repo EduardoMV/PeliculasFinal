@@ -1,5 +1,6 @@
 package com.example.peliculas
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -28,6 +30,7 @@ class Menu_principal : AppCompatActivity() {
     val myRef = database.getReference("peliculas")
     lateinit var peliculas:ArrayList<Pelicula>
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_principal)
@@ -41,29 +44,30 @@ class Menu_principal : AppCompatActivity() {
 
         menuHost.addMenuProvider(object : MenuProvider {
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater){
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu, menu)
             }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean{
-                return  when(menuItem.itemId)
-                {
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
                     R.id.salir -> {
                         auth.signOut()
                         startActivity(Intent(this@Menu_principal, Login::class.java))
                         finish()
                         true
                     }
+
                     R.id.perfil -> {
                         true
                     }
+
                     else -> false
                 }
             }
 
         })
 
-        myRef.addValueEventListener(object: ValueEventListener {
+        myRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
@@ -72,10 +76,14 @@ class Menu_principal : AppCompatActivity() {
                 val value = snapshot.value
                 Log.d(TAG, "Value is: " + value)
 
-                snapshot.children.forEach{
-                    hijo ->
+                snapshot.children.forEach { hijo ->
 
-                    var pelicula: Pelicula = Pelicula(hijo.child("nombre").value.toString(), hijo.child("genero").value.toString(), hijo.child("anio").value.toString(), hijo.key.toString())
+                    var pelicula: Pelicula = Pelicula(
+                        hijo.child("nombre").value.toString(),
+                        hijo.child("genero").value.toString(),
+                        hijo.child("anio").value.toString(),
+                        hijo.key.toString()
+                    )
                     peliculas.add(pelicula)
                 }
                 llenaLista()
@@ -86,7 +94,27 @@ class Menu_principal : AppCompatActivity() {
             }
 
         })
+
+        val lista = findViewById<ListView>(R.id.lista)
+
+        lista.setOnItemClickListener { parent, view, position, id ->
+            startActivity(
+                Intent(this, Detalles::class.java)
+                    .putExtra("nombre", peliculas[position].nombre)
+                    .putExtra("genero", peliculas[position].genero)
+                    .putExtra("anio", peliculas[position].anio)
+                    .putExtra("id", peliculas[position].id)
+            )
+        }
+
+        val btnagregar = findViewById<FloatingActionButton>(R.id.botonAgregar)
+
+        btnagregar.setOnClickListener {
+            startActivity(Intent(this, AgregarPelis::class.java))
+        }
+
     }
+
 
     fun llenaLista ()
     {

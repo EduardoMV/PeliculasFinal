@@ -13,22 +13,27 @@
         android:theme="@style/Theme.Peliculas"
         tools:targetApi="31">
         <activity
+            android:name=".Detalles"
+            android:exported="false" />
+        <activity
+            android:name=".AgregarPelis"
+            android:exported="false" />
+        <activity
             android:name=".Menu_principal"
             android:exported="false"
-            android:launchMode="singleInstance"/>
-
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Cambiar_password"
             android:exported="false"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Crear_cuenta"
             android:exported="false"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".Login"
             android:exported="true"
-            android:launchMode="singleInstance" >
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
